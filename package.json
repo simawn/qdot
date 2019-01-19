@@ -1,0 +1,19 @@
+{
+  "name": "qdot",
+  "version": "1.0.0",
+  "description": "Hackatown 2019",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simawn/qdot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simawn/qdot/issues"
+  },
+  "homepage": "https://github.com/simawn/qdot#readme"
+}
