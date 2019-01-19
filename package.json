@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/simawn/qdot/issues"
   },
-  "homepage": "https://github.com/simawn/qdot#readme"
+  "homepage": "https://github.com/simawn/qdot#readme",
+  "dependencies": {
+    "mongoose": "^5.4.5"
+  }
 }
