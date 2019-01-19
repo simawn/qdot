@@ -1,59 +1,44 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const Places = require('../schema/places');
+const dbAPI = require('./dbAPI');
+
 const app = express();
 app.use(express.json());
-
-mongoose.connect('mongodb://localhost/qdot', { useNewUrlParser: true });
-let db = mongoose.connection;
-
-//Making sure database is connected and catching errors
-db.once('open', () => {
-    console.log('Database connected!');
-});
-db.on('error', (err) => {
-    console.log(err);
-});
 
 app.get('/', (req, res) => {
     res.send('Mock Server Running!');
 });
 
 /**
- * Add place to database
  * Body:
- * {
- *  placeName: "Polytechnique Montréal",
-    placeAddress: "2900 Edouard Montpetit Blvd, Montreal, QC H3T 1J4",
-    placeLatitude: 45.504384,
-    placeLongitude: -73.6128829,
- * }
+{
+  "placeName": "Polytechnique Montréal", 
+  "placeAddress": "2900 Edouard Montpetit Blvd, Montreal, QC H3T 1J4", 
+  "placeLatitude": 45.504384, 
+  "placeLongitude": -73.6128822
+}
  */
-app.post('/addPlace', (req, res) => {
-    new Places({
-        placeName: req.body.placeName,
-        placeAddress: req.body.placeAddress,
-        placeLatitude: req.body.placeLatitude,
-        placeLongitude: req.body.placeLongitude
-    }).save((err) => {
-        res.send("Added");
-        console.log(err);
-    });
+app.post('/api/addPlace', (req, res) => {
+    async function addPlace(){
+        let addPlaceReturn = await dbAPI.addPlace(req.body.placeName, req.body.placeAddress, req.body.placeLatitude, req.body.placeLongitude);
+        res.send(addPlaceReturn);
+    }
+    addPlace();
 });
 
 /**
- * Add place to database
- */
-app.post('/sendRating', (req, res) => {
-
-});
-
-APIReturn1 = {
-    placeName: "Polytechnique Montréal",
-    placeAddress: "2900 Edouard Montpetit Blvd, Montreal, QC H3T 1J4",
-    placeLatitude: 45.504384,
-    placeLongitude: -73.6128829,
+ * Body:
+{
+  "placeName": "Polytechnique Montréal", 
+  "rating": 4
 }
+ */
+app.post('/api/updateRating/', (req, res) => {
+    async function updateRating(){
+        let updateRatingReturn = await dbAPI.updateRating(req.body.place, req.body.rating);
+        res.send(updateRatingReturn);
+    }
+    updateRating();
+});
 
 let port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
