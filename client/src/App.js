@@ -1,20 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import StarRatingComponent from 'react-star-rating-component';
  
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
  
     this.state = {
-      rating: 0
+      rating: this.props.rating || null
     };
   }
  
   onStarClick(nextValue, prevValue, name) {
-    this.setState({rating: nextValue});
+    if(prevValue){
+      this.setState({rating: nextValue});
+      axios.put('/user', {
+        placeName:
+        userID:
+        rating: nextValue
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    } else {
+    axios.post('/user', {
+      placeName: 
+      userID:
+      rating: nextValue
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    }
   }
- 
+
   render() {
     const { rating } = this.state;
     
