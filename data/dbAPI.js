@@ -73,10 +73,10 @@ function getAllPlaceData(){
     });
 }
 
-function addUser(latitude, longitude){
+function addUser(userId, latitude, longitude){
     return new Promise((resolve, reject) => {
         new Users({
-            id: 0,
+            id: userId,
             places: [],
             latitude: latitude,
             longitude: longitude
@@ -90,7 +90,7 @@ function addUser(latitude, longitude){
 function getUserData(objId){
     return new Promise((resolve, reject) => {
         Users.findOne({
-            _id: objId
+            id: objId //Custom id search
         }).exec((err, result) => {
             if(err) reject(err);
             resolve(result);
@@ -115,6 +115,27 @@ function addUserAlreadyRatedPlace(userId, placeId){
     });
 }
 
+function decreaseAllRatingsBy(amount){
+    Places.updateMany({
+        placeRating: {$gt: 1}
+    }
+    ,{
+        $inc: { placeRating: -amount } 
+    }).exec(() => {
+        console.log("All ratings decreased by " + amount)
+    });
+}
+
+function clearVotePlaces(){
+    Users.updateMany({
+        //all
+    }, {
+        $pull: {places: {$exists: true}}
+    }).exec(() => {
+        console.log("All users can now revote")
+    });
+}
+
 module.exports.addPlace = addPlace;
 module.exports.updateRating = updateRating;
 module.exports.getPlaceData = getPlaceData;
@@ -122,3 +143,5 @@ module.exports.addUser = addUser;
 module.exports.getUserData = getUserData;
 module.exports.addUserAlreadyRatedPlace = addUserAlreadyRatedPlace;
 module.exports.getAllPlaceData = getAllPlaceData;
+module.exports.decreaseAllRatingsBy = decreaseAllRatingsBy;
+module.exports.clearVotePlaces = clearVotePlaces;
