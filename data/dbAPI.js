@@ -3,6 +3,7 @@ const Places = require('../schema/places');
 const Users = require('../schema/users');
 
 mongoose.connect('mongodb://localhost/qdot', { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 let db = mongoose.connection;
 
 //Making sure database is connected and catching errors
@@ -32,10 +33,10 @@ function addPlace(placeName, placeAddress, placeLatitude, placeLongitude, placeR
 }
 
 //This function literaly replaces the current rating. Does not do any calculations.
-function updateRating(placeName, rating) {
+function updateRating(placeId, rating) {
     return new Promise((resolve, reject) => {
         Places.findOneAndUpdate({
-            placeName: placeName
+            _id: placeId
         }
         ,{
             placeRating: rating
@@ -49,10 +50,22 @@ function updateRating(placeName, rating) {
     });
 }
 
-function getPlaceData(placeName) {
+function getPlaceData(placeId) {
     return new Promise((resolve, reject) => {
         Places.findOne({
-            placeName: placeName
+            _id: placeId
+        }).exec((err, result) => {
+            if(err) reject(err);
+            console.log(result);
+            resolve(result);
+        });
+    });
+}
+
+function getAllPlaceData(){
+    return new Promise((resolve, reject) => {
+        Places.find({
+            //Find all
         }).exec((err, result) => {
             if(err) reject(err);
             resolve(result);
@@ -85,13 +98,16 @@ function getUserData(objId){
     });
 }
 
-function addUserAlreadyRatedPlace(userObjId, placeObj){
+function addUserAlreadyRatedPlace(userId, placeId){
     return new Promise((resolve, reject) => {
         Users.findOneAndUpdate({
-            _id: userObjId
+            _id: userId
         }
         ,{
-            $push: { places: placeObj._id }
+            $push: { places: placeId }
+        }
+        ,{
+            new: true
         }).exec((err, result) => {
             if(err) reject(err);
             resolve(result);
@@ -105,3 +121,4 @@ module.exports.getPlaceData = getPlaceData;
 module.exports.addUser = addUser;
 module.exports.getUserData = getUserData;
 module.exports.addUserAlreadyRatedPlace = addUserAlreadyRatedPlace;
+module.exports.getAllPlaceData = getAllPlaceData;
