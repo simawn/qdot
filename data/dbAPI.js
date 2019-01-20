@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Places = require('../schema/places');
+const Users = require('../schema/users');
 
 mongoose.connect('mongodb://localhost/qdot', { useNewUrlParser: true });
 let db = mongoose.connection;
@@ -48,14 +49,59 @@ function updateRating(placeName, rating) {
     });
 }
 
-function getRating(placeName) {
-    console.log("getRating called!" + check);
-    return "getRating";
+function getPlaceData(placeName) {
+    return new Promise((resolve, reject) => {
+        Places.findOne({
+            placeName: placeName
+        }).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        });
+    });
 }
 
-function getNumberOfRatings(placeName) {
-    return "getNumberOfRatings";
+function addUser(latitude, longitude){
+    return new Promise((resolve, reject) => {
+        new Users({
+            id: 0,
+            places: [],
+            latitude: latitude,
+            longitude: longitude
+        }).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        });
+    });
+}
+
+function getUserData(objId){
+    return new Promise((resolve, reject) => {
+        Users.findOne({
+            _id: objId
+        }).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        });
+    });
+}
+
+function addUserAlreadyRatedPlace(userObjId, placeObj){
+    return new Promise((resolve, reject) => {
+        Users.findOneAndUpdate({
+            _id: userObjId
+        }
+        ,{
+            $push: { places: placeObj._id }
+        }).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        });
+    });
 }
 
 module.exports.addPlace = addPlace;
 module.exports.updateRating = updateRating;
+module.exports.getPlaceData = getPlaceData;
+module.exports.addUser = addUser;
+module.exports.getUserData = getUserData;
+module.exports.addUserAlreadyRatedPlace = addUserAlreadyRatedPlace;
