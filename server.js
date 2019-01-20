@@ -1,25 +1,14 @@
 const express = require('express');
-const snapMap = require('../lib');
+const express = require('express');
+const dbAPI = require('./dbAPI');
+
 const app = express();
-
-  const MongoClient = require('mongodb').MongoClient;
-  const url = "mongodb://localhost:27017/";
-
-  const mongoose = require('mongoose');
-
-//Set up default mongoose connection
-    var mongoDB = 'mongodb://127.0.0.1/my_database';
-    mongoose.connect(mongoDB);
-// Get Mongoose to use the global promise library
-    mongoose.Promise = global.Promise;
-//Get the default connection
-    var db = mongoose.connection;
-
-//Bind connection to error event (to get notification of connection errors)
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+app.use(express.json());
 
 app.get('/', (req, res) => {
-
+    res.send('Mock Server Running!');
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+
+let port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}`));
