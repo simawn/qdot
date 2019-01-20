@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Server is running!');
+    res.sendStatus(200);
 });
 
 app.post('/updateRating', (request, response) => {
