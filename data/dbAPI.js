@@ -116,7 +116,7 @@ function addUserAlreadyRatedPlace(userId, placeId){
 }
 
 function decreaseAllRatingsBy(amount){
-    Places.update({
+    Places.updateMany({
         placeRating: {$gt: 1}
     }
     ,{
@@ -127,7 +127,7 @@ function decreaseAllRatingsBy(amount){
 }
 
 function clearVotePlaces(){
-    Users.update({
+    Users.updateMany({
         //all
     }, {
         $pull: {places: {$exists: true}}
