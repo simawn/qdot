@@ -16,8 +16,8 @@ class App extends React.Component {
     if(prevValue){
       this.setState({rating: nextValue});
       axios.put('/user', {
-        placeName: 'Fivespan'
-        userID: '5c43dacaf811591dd04b1aa6'
+        placeName: 'Fivespan',
+        userID: '5c43dacaf811591dd04b1aa6',
         rating: nextValue
       })
       .then(function (response) {
@@ -28,8 +28,8 @@ class App extends React.Component {
       });
     } else {
     axios.post('/user', {
-      placeName: 'Fivespan'
-      userID: '5c43dacaf811591dd04b1aa6'
+      placeName: 'Fivespan',
+      userID: '5c43dacaf811591dd04b1aa6',
       rating: nextValue
     })
     .then(function (response) {
