@@ -8,23 +8,25 @@ app.get('/', (req, res) => {
     res.sendStatus(200);
 });
 
-app.post('/updateRating', (request, response) => {
+app.get('/updateRating/:placeId', (request, response) => {
     async function updateRating() {
-        let bodyPlaceId = request.body.placeId;
-        let bodyUserId = request.body.userId;
-
+        let bodyPlaceId = request.params.placeId;
+        //let bodyUserId = request.params.userId;
+        console.log(bodyPlaceId);
+        //console.log(bodyUserId);
         let placeObject = await dbAPI.getPlaceData(bodyPlaceId);
-
-        var calculatedNewRating = placeObject.placeRating * 1.05; //Increase by 10%
+        //console.log(placeObject);
+        var calculatedNewRating = placeObject.placeRating * 1.10; //Increase by 10%
         var newRating = calculatedNewRating;
         if (calculatedNewRating >= 5) {
             newRating = 5;
         }
 
         let newPlaceObj = await dbAPI.updateRating(bodyPlaceId, newRating);
-
-        await dbAPI.addUserAlreadyRatedPlace(bodyUserId, bodyPlaceId);
-        response.send(newPlaceObj);
+        console.log(newPlaceObj);
+        let arrayObj = [newPlaceObj];
+        //await dbAPI.addUserAlreadyRatedPlace(bodyUserId, bodyPlaceId);
+        response.send(arrayObj);
     }
     updateRating();
 });
@@ -38,9 +40,9 @@ app.get('/getAllPlaces', (req, res) => {
     getAllPlaces();
 });
 
-app.post('/getPlace', (req, res) => {
+app.get('/getPlace/:placeId', (req, res) => {
     async function getPlace(){
-        let placeObj = await dbAPI.getPlaceData(req.body.placeId);
+        let placeObj = await dbAPI.getPlaceData(req.params.placeId);
         res.setHeader("Content-Type", "application/json");
         res.send(placeObj);
     }
@@ -69,18 +71,20 @@ app.post('/addUser', (req, res) => {
 //Lit bar depletion.
 setInterval(() => {
     async function decrease() {
-        await dbAPI.decreaseAllRatingsBy(0.07);
+        await dbAPI.decreaseAllRatingsBy(0.1);
     }
     decrease();
-}, 300000);
+}, 20000);
 
 //Users can revote
+/*
 setInterval(() => {
     async function revote() {
         await dbAPI.clearVotePlaces();
     }
     revote();
 }, 600000);
+*/
 
 let port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
