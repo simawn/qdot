@@ -11,5 +11,5 @@ Have you ever been to a bar, a club, or any other social gathering place that tu
 
 This application allows users to vote the awesomeness of a place at the current time. Every vote will increase the lit🔥 bar. However, make sure you keep voting because the Litmeter🔥💯👌 of that place will slowly decrease overtime. Users can vote multiple times after a certain interval. Let everyone know where's the party's at!
 
-![](graphics/splash-xxxhdpi.jpg)
-![](graphics/app.png)
+![](graphics/30app.png)
+![](graphics/30splash-xxxhdpi.jpg)
