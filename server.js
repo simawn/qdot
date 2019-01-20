@@ -8,7 +8,25 @@ app.get('/', (req, res) => {
     res.send('Mock Server Running!');
 });
 
+app.put('updateRating', (request, response) => {
+	async function updateRating(){
+		let placeObject = await dbAPI.getPlaceData(request.body.placeName);
+    	let userRating = request.body.userRating;
+    	let userObject = await dbAPI.getUserData(request.body.userID);
 
+    	var currentRating = placeObject.placeRating;
+    	var totalRatings = placeObject.placeRating;
+
+    	var newRating = (currentRating+userRating)/(totalRatings+1);
+
+
+    	await dbAPI.updateRating(placeObject.placeName, newRating);
+
+    	await dbAPI.addUserAlreadyRatedPlace(userObject._id, placeObject);
+    	response.send('Updated!');
+   	}
+   		updateRating();
+});
 
 app.post('/updateRating', (request, response) => {
     /*
