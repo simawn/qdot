@@ -74,7 +74,7 @@ setInterval(() => {
         await dbAPI.decreaseAllRatingsBy(0.1);
     }
     decrease();
-}, 20000);
+}, 5000);
 
 //Users can revote
 /*
